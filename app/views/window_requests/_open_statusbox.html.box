@@ -1,0 +1,47 @@
+     <% if @@window_request_open_js_open_js.nil? %>
+     <% else %>
+          <div id="statusbox-<%= @window_request_open_js.id %>" class="box box-success box-solid">
+                                        <div class="box-header with-border">
+                                        <h3 class="box-title"><%= @window_request_open_js.status %></h3>
+
+                                                <div class="box-tools pull-right">
+                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                                </button>
+                                                </div>
+                                                <!-- /.box-tools -->
+                                        </div>
+                                        <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table">
+                <tr>
+                        <th>Check-In ID</th>
+                        <th><%= @window_request_open_js.username %></th>
+                </tr>
+                <tr>
+                        <th>Branch</th>
+                        <th><%= @window_request_open_js.version %></th>
+                </tr>
+                <tr>
+                        <th>Comment & Requirement</th>
+                        <th><%= @window_request_open_js.comment %></th>
+                </tr>
+                <tr>
+                        <th>Window Range</th>
+                        <th><%= @window_request_open_js.time_range %></th>
+                </tr>
+              </table>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-clock-o"></i>
+                  </div>
+                  <input type="text" name="@window_request_open_js[time_range]" class="form-control pull-right" id="reservationtime-confirm-<%= @window_request_open_js.id %>" disabled>
+              </div>
+                <div class="input-group">
+                                <input class="btn btn-large btn-primary  disabled" name="commit" value="OPEN" type="submit">
+                </div>
+                <!-- /.input group -->
+            </div>
+            <!-- /.box-body -->
+        </div>
+</div>
+     <% end %>

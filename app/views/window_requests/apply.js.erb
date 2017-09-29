@@ -1,0 +1,9 @@
+$("#statusbox").html("<%= escape_javascript(render('window_requests/statusbox')) %>");
+$('#reservationtime-confirm').daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 10,
+        timePicker24Hour: true,
+        locale: {
+            format: 'MM/DD/YYYY hh:mm:ss'
+        }
+        });

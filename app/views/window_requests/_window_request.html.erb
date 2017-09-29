@@ -1,0 +1,64 @@
+<div id="openbox-<%= window_request.id %>" class="col-md-4">
+<% if window_request.status == 'Waiting' %>
+                <div id="statusbox-<%= window_request.id %>" class="box box-warning box-solid">
+<% elsif window_request.status == 'Opened' %>
+                <div id="statusbox-<%= window_request.id %>" class="box box-success box-solid">
+<% elsif window_request.status == 'Unavailable' %>
+                <div id="statusbox-<%= window_request.id %>" class="box box-danger box-solid">
+<% end %>
+                                        <div class="box-header with-border">
+                                        <h3 class="box-title"><%= window_request.status %></h3>
+
+                                                <div class="box-tools pull-right">
+                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                                </button>
+                                                </div>
+                                                <!-- /.box-tools -->
+                                        </div>
+                                        <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table">
+                <tr>
+                        <th>Check-In ID</th>
+                        <th><%= window_request.username %></th>
+                </tr>
+                <tr>
+                        <th>Branch</th>
+                        <th><%= window_request.version %></th>
+                </tr>
+                <tr>
+                        <th>Comment & Requirement</th>
+                        <th><%= window_request.comment %></th>
+                </tr>
+                <tr>
+		<% if window_request.status == 'Opened' %>
+			<th>Window Range</th>
+		<% else %>
+                        <th>Perefer Window Range</th>
+		<% end %>
+                        <th><%= window_request.time_range %></th>
+                </tr>
+              </table>
+<form accept-charset="UTF-8" action="/open" method="post" class="form-group" data-remote="true" >
+                <div id="form-timerange-<%= window_request.id %>">
+			<div class="input-group">
+                  		<div class="input-group-addon">
+                    		<i class="fa fa-clock-o"></i>
+                 		 </div>
+                  		<input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime-confirm-<%= window_request.id %>-1">
+                	</div>
+		</div>
+                <div class="input-group">
+			<button id="append-timerange-<%= window_request.id %>" class="btn btn-large btn-primary"> + </button>
+			<% if window_request.status == 'Waiting' %>
+				<input class="btn btn-large btn-primary" name="id-<%= window_request.id %>" value="OPEN" type="submit">
+			<% else %>
+				<input class="btn btn-large btn-primary disabled" name="commit" value="OPEN" type="submit">
+			<% end %>
+                </div>
+</form>
+                <!-- /.input group -->
+            </div>
+            <!-- /.box-body -->
+        </div>
+</div>

@@ -1,0 +1,41 @@
+     <% if @window_request_js.nil? %>
+     <% else %>
+	      <div class="box-header with-border">
+              	<h3 class="box-title">Waiting</h3>
+
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                	</button>
+              	</div>
+              <!-- /.box-tools -->
+            	</div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table">
+                <tr>
+                        <th>Check-In ID</th>
+                        <th><%= @window_request_js.username %></th>
+                </tr>
+                <tr>
+                        <th>Branch</th>
+                        <th><%= @window_request_js.version %></th>
+                </tr>
+                <tr>
+                        <th>Comment & Requirement</th>
+                        <th><%= @window_request_js.comment %></th>
+                </tr>
+                <tr>
+                        <th>Pefer Window Range</th>
+                        <th><%= @window_request_js.time_range %></th>
+                </tr>
+	      </table>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-clock-o"></i>
+                  </div>
+                  <input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime-confirm">
+                </div>
+                <!-- /.input group -->
+            </div>
+            <!-- /.box-body -->
+       <% end %>

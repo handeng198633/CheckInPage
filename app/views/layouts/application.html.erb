@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RedHawk Check-In Page</title>
+    <%= favicon_link_tag 'ansys_icon.ico' %>
+    <%= csrf_meta_tags %>
+    <%= action_cable_meta_tag %>    
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application' %>
+  <script>
+$(document).ready(function(){
+    $("button[id*='append-timerange']").click(function(){
+      alert(this.id);
+      var number = this.id.split("-")[2];
+      $("#form-timerange-" + number ).append('<div class="input-group"><div class="input-group-addon"><i class="fa fa-clock-o"></i></div><input id="reservationtime-confirm-append" type="text" name="window_request[time_range]" class="form-control pull-right"></div>');
+      $(input[id='reservationtime-confirm-append']).daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 10,
+        timePicker24Hour: true,
+        locale: {
+            format: 'MM/DD/YYYY h:mm A'
+        }
+        });
+        });
+
+});
+  </script>
+  </head>
+
+  <body>
+   <% if notice %>
+     <p class="alert alert-success"><%= notice %></p>
+   <% end %>
+   <% if alert %>
+     <p class="alert alert-danger"><%= alert %></p>
+   <% end %>
+   <header class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <% if user_signed_in? %>
+       Logged in as <strong><%= current_user.email %></strong>.
+       <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+       <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+    <% else %>
+       <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+       <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+    <% end %>
+   </header>
+   <div class="container">
+    <%= yield %>
+   </div>
+    <script type="text/javascript">
+	$(function() {
+    $('#reservationtime').daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 10,
+        timePicker24Hour: true,
+        locale: {
+            format: 'MM/DD/YYYY h:mm A'
+        }
+    	});
+    $("input[id*='reservationtime-confirm']").daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 10,
+        timePicker24Hour: true,
+        locale: {
+            format: 'MM/DD/YYYY h:mm A'
+        }
+        });
+        });
+    </script>
+  </body>
+</html>

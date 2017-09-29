@@ -1,0 +1,7 @@
+                <div class="comment-text">
+                      <span class="username">
+                        <%= User.where("id = ?", message.user_id).first.email %>
+                        <span class="text-muted pull-right"><%= message.created_at %></span>
+                      </span><!-- /.username -->
+                        <%= message.content %>
+                </div>

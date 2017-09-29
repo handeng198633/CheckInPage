@@ -1,0 +1,142 @@
+<% provide(:title, 'Check-In Page') %>
+
+  <div class="login-logo">
+    <a href="/"><b>Check-In</b>Page</a>
+  </div>
+
+<% if current_user.id == 1 %>
+<div class="row">
+ <%= render @window_requests %>
+</div>
+<div class="row"><%= will_paginate %></div>
+<% else%>
+
+<div class="row">
+<div class="col-md-6">
+  <div class="box box-primary">
+    <div class="box-header">
+    <h3 class="box-title">Window Request</h3>
+    </div>
+    <div class="box-body">
+    <form accept-charset="UTF-8" action="/apply" method="post" class="form-group" data-remote="true" >
+	<div class = "row">
+                <div class="col-lg-6">
+                 <label>Check-In ID:</label>
+                  <input type="text" class="form-control" name="window_request[username]" placeholder="Check-In ID">
+                </div>
+                <div class="col-lg-6">
+	        <label>Branch:</label>
+                  <select name="window_request[version]" class ="form-control">
+			<option value="rd">rd</option>
+			<option value="RH18v1">18.1</option>
+			<option value="RH18v0">18.0</option>
+		  </select>
+                </div>
+         </div>
+         <div class = "row">
+                <label>Window Open Range:</label>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-clock-o"></i>
+                  </div>
+                  <input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime">
+                </div>
+                <!-- /.input group -->
+	  </div>
+	  <div class = "row">
+                  <label>Comment & Requirement:</label>
+                  <textarea class="form-control" rows="3" name="window_request[comment]" placeholder="Enter ..."></textarea>
+	  </div>
+          <div class = "row">
+                <input class="btn btn-large btn-primary" name="commit" type="submit" value="Send Request" />
+          </div>
+     </form>
+    </div>
+  </div>
+</div>
+<div class="col-md-6">
+<% if @window_request.status == 'Waiting' %>
+                <div id="statusbox" class="box box-warning box-solid">
+<% elsif @window_request.status == 'Opened' %>
+                <div id="statusbox" class="box box-success box-solid">
+<% elsif @window_request.status == 'Unavailable' %>
+                <div id="statusbox%" class="box box-danger box-solid">
+<% end %>
+				<% if @window_request.nil? %>
+				<% else %>
+            				<div class="box-header with-border">
+              				<h3 class="box-title"><%= @window_request.status %></h3>
+
+              					<div class="box-tools pull-right">
+                				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                				</button>
+              					</div>
+              					<!-- /.box-tools -->
+            				</div>
+            				<!-- /.box-header -->
+            <div class="box-body">
+              <table class="table">
+                <tr>
+                        <th>Check-In ID</th>
+                        <th><%= @window_request.username %></th>
+                </tr>
+                <tr>
+                        <th>Branch</th>
+                        <th><%= @window_request.version %></th>
+                </tr>
+                <tr>
+                        <th>Comment & Requirement</th>
+                        <th><%= @window_request.comment %></th>
+                </tr>
+                <tr>
+		<% if @window_request.status == 'Opened' %>
+			<th>Window Range</th>
+		<% else %>	
+                        <th>Perefer Window Range</th>
+		<% end %>
+                        <th><%= @window_request.time_range %></th>
+                </tr>
+              </table>
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i class="fa fa-clock-o"></i>
+                  </div>
+                  <input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime-confirm" disabled>
+                </div>
+                <!-- /.input group -->
+          	</div>
+            </div>
+            <!-- /.box-body -->
+	    <% end %>
+    </div>
+  </div>
+<% end %><!--user.admin?-->
+
+  <div class-"row">
+    <div class="col-md-12">
+	<div class="box box-widget">
+            <div class="box-header with-border">
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+            </div>
+            <div id="messages-table" class="box-footer box-comments">
+		<% if @messages.any? %>
+			<% @messages.each do |message| %>
+				<div class="box-comment">
+				<div class="comment-text">
+                      			<span class="username">
+                        			<%= User.where("id = ?", message.user_id).first.email %>
+                        			<span class="text-muted pull-right"><%= message.created_at %></span>
+                      			</span><!-- /.username -->
+                        		<%= message.content %>
+                		</div>
+				</div>
+			<% end %>
+		<% end %>
+              </div><!--box-footer-->
+            </div><!--box-->
+           </div><!--col-md-12-->
+    </div><!--row-->
+</div>
+
