@@ -1,41 +1,89 @@
-     <% if @window_request_js.nil? %>
-     <% else %>
-	      <div class="box-header with-border">
-              	<h3 class="box-title">Waiting</h3>
+<% if @window_request_js.nil? %>
+<% else %>
+  <div id="statusbox" class="box box-warning box-solid">
+      <div class="box-header box-warning with-border">
+	<h3 class="box-title">Waiting</h3>
 
-              	<div class="box-tools pull-right">
-                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                	</button>
-              	</div>
-              <!-- /.box-tools -->
-            	</div>
-            <!-- /.box-header -->
-            <div class="box-body">
-              <table class="table">
+	<div class="box-tools pull-right">
+		<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+		</button>
+	</div>
+      <!-- /.box-tools -->
+	</div>
+    <!-- /.box-header -->
+    <div class="box-body">
+      <table class="table">
+	<tr>
+		<td>Check-In ID</td>
+		<td><%= @window_request_js.username %></td>
+	</tr>
+	<tr>
+		<td>Branch</td>
+		<td><%= @window_request_js.version %></td>
+	</tr>
+        <tr>
+                <td>Bugzilla ID</td>
+                <td><%= @window_request_js.bugid %></td>
+        </tr>
                 <tr>
-                        <th>Check-In ID</th>
-                        <th><%= @window_request_js.username %></th>
+                        <td>Files</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_js.filetext.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
                 <tr>
-                        <th>Branch</th>
-                        <th><%= @window_request_js.version %></th>
+                        <td>Reason & Impact to Results</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_js.comment.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
                 <tr>
-                        <th>Comment & Requirement</th>
-                        <th><%= @window_request_js.comment %></th>
+                        <td>Tests Done</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_js.textdone.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <% if @window_request_js.version == 'rd' %>
+                <tr>
+                        <td>Group QA Coverage</td>
+                        <td><%= @window_request_js.Group_qa_coverage %></td>
+                </tr>
+                <% else %>
+                <tr>
+                        <td>AE Contact</td>
+                        <td><%= @window_request_js.ae_contact%></td>
                 </tr>
                 <tr>
-                        <th>Pefer Window Range</th>
-                        <th><%= @window_request_js.time_range %></th>
+                        <td>Product Category</td>
+                        <td><%= @window_request_js.product_category %></td>
                 </tr>
+                <tr>
+                        <td>Justification for Back-porting</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_js.justification_back_porting.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Change Summary</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_js.change_summary.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Impact to DB</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_js.impact_to_db.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>History</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_js.history.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                
+                <% end %>
+                <tr>
+                        <td>Pefer Window Range</td>
+                        <td>
+                          <table>
+                                <tr><td><ul>
+                                <% @window_request_js.time_range.split(',').each do |s| %>
+                                        <li><%= s %></li>
+                                <% end %>
+                                </ul></td></tr>
+                         </table>
+                        </td>
+		 </tr>
 	      </table>
-                <div class="input-group">
-                  <div class="input-group-addon">
-                    <i class="fa fa-clock-o"></i>
-                  </div>
-                  <input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime-confirm">
-                </div>
-                <!-- /.input group -->
             </div>
             <!-- /.box-body -->
+         </div>
        <% end %>
+

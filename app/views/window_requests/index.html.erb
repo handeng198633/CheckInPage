@@ -5,7 +5,26 @@
   </div>
 
 <% if current_user.id == 1 %>
-<div class="row">
+<div class="col-xs-12">
+          <div class="box box-primary box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title">Windows Status</h3>
+            </div>
+            <div class="box-body">
+              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal-warning">
+                 <%= WindowRequest.where(status: 'Waiting').count %> Waiting Windows
+              </button>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modal-danger">
+                 <%= WindowRequest.where(status: 'Unavailable').count %> Held/Time out Windows
+              </button>
+              <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modal-success">
+                 <%= WindowRequest.where(status: 'Opened').count %> Opened Windows
+              </button>
+              </button>
+            </div>
+          </div>
+        </div>
+<div id="request-push" class="row">
  <%= render @window_requests %>
 </div>
 <div class="row"><%= will_paginate %></div>
@@ -13,27 +32,33 @@
 
 <div class="row">
 <div class="col-md-6">
-  <div class="box box-primary">
-    <div class="box-header">
+  <div class="box box-primary box-solid">
+    <div class="box-header with-border">
     <h3 class="box-title">Window Request</h3>
     </div>
     <div class="box-body">
     <form accept-charset="UTF-8" action="/apply" method="post" class="form-group" data-remote="true" >
 	<div class = "row">
-                <div class="col-lg-6">
-                 <label>Check-In ID:</label>
-                  <input type="text" class="form-control" name="window_request[username]" placeholder="Check-In ID">
+                <div class="col-md-4">
+                 <label>Check-In ID(required):</label>
+                  <input type="text" id="checkin-box" class="form-control" name="window_request[username]" placeholder="unix login name">
                 </div>
-                <div class="col-lg-6">
-	        <label>Branch:</label>
-                  <select name="window_request[version]" class ="form-control">
-			<option value="rd">rd</option>
-			<option value="RH18v1">18.1</option>
-			<option value="RH18v0">18.0</option>
-		  </select>
+                <div class="col-md-4">
+	                 <label>Branch:</label>
+                  <select onchange="val()" name="window_request[version]" class ="form-control" id= "version_select">
+			             <option value="rd">rd</option>
+				     <option value="RH<%= `cat /projs00/qa/misc/UQA_RELEASE5`.sub!("\n", "").sub(".", "v") %>"><%= `cat /projs00/qa/misc/UQA_RELEASE5`.sub!("\n", "")%></option>
+				     <option value="RH<%= `cat /projs00/qa/misc/UQA_RELEASE6`.sub!("\n", "").sub(".", "v") %>"><%= `cat /projs00/qa/misc/UQA_RELEASE6`.sub!("\n", "")%></option>
+				     <option value="RH<%= `cat /projs00/qa/misc/UQA_RELEASE7`.sub!("\n", "").sub(".", "v") %>"><%= `cat /projs00/qa/misc/UQA_RELEASE7`.sub!("\n", "")%></option>
+		              </select>
                 </div>
-         </div>
+		<div class="col-md-4">
+			<label>Bugzilla ID:</label>
+			<input type="text" id="bugid-box" class="form-control" name="window_request[bugid]" placeholder="e.g. BZ12345">
+		</div>
+  </div>
          <div class = "row">
+          <div class="col-md-12">
                 <label>Window Open Range:</label>
                 <div class="input-group">
                   <div class="input-group-addon">
@@ -42,29 +67,94 @@
                   <input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime">
                 </div>
                 <!-- /.input group -->
+	       </div>
+         </div>
+      <div class="col-md-12">
+                  <label>Files:</label>
+                  <textarea id="files-box" class="form-control" rows="4" name="window_request[filetext]" placeholder="Enter list of files that will be checked in..."></textarea>
+      </div>
+      <div class="col-md-12">
+                  <label>Reason & Impact to Results:</label>
+                  <textarea id="comment-box" class="form-control" rows="4" name="window_request[comment]" placeholder="Enter brief description of reason for the check-in, or brief description of any impact in result..."></textarea>
+      </div>
+      <div class="col-md-12">
+                  <label>Tests Done:</label>
+                  <textarea id="tests-box" class="form-control" rows="3" name="window_request[textdone]" placeholder="e.g unitQA, groupQA, specialQA, or case name_list."></textarea>
+      </div>
+
+      <div id="form-1" class="col-md-12">
+       <div class="col-md-6">
+                  <label>Group QA Coverage:</label>
+                  <select name="window_request[Group_qa_coverage]" class ="form-control">
+                                     <option value=""></option>
+                                     <option value="YES">YES</option>
+                                     <option value="NO">NO</option>
+                              </select>
+       </div>
+
+      </div>
+	
+      <div id="form-2" >
+		<div class="col-md-12">
+		<div class="col-md-6">
+                  <label>AE Contact:</label>
+                  <textarea id="ae_contact_box" class="form-control" rows="1" name="window_request[ae_contact]" placeholder="Enter..."></textarea>
+      		</div>
+      		<div class="col-md-6">
+                  <label>Product Category:</label>
+                  <select id="product_category_box" name="window_request[product_category]" class ="form-control">
+                                     <option value=""></option>
+                                     <option value="For RedHawk only">for RedHawk only</option>
+                                     <option value="For Totem only">For Totem only</option>
+                                     <option value="Both RedHawk and Totem">Both RedHawk and Totem</option>
+                              </select>
+      		</div>
+		</div>
+                <div class="col-md-12">
+                  <label>Justification for Back-porting:</label>
+                  <textarea id="back-porting-box" class="form-control" rows="3" name="window_request[justification_back_porting]" placeholder="Only bug fixes should be back-ported to production streams...."></textarea>
+		</div>
+                <div class="col-md-12">
+                  <label>Change Summary:</label>
+                  <textarea id="change-summary-box" class="form-control" rows="3" name="window_request[change_summary]" placeholder="Enter change summary for release note..."></textarea>
+                </div>
+                <div class="col-md-12">
+                  <label>Impact to DB:</label>
+                  <textarea id="impact-to-db-box" class="form-control" rows="3" name="window_request[impact_to_db]" placeholder="Brief description of any impact in result for users or QA tests..."></textarea>
+                </div>
+                <div class="col-md-12">
+                  <label>History:</label>
+                  <textarea id="history-box" class="form-control" rows="3" name="window_request[history]" placeholder="Enter the history of rd trunk check-in (when)..."></textarea>
+                </div>
 	  </div>
-	  <div class = "row">
-                  <label>Comment & Requirement:</label>
-                  <textarea class="form-control" rows="3" name="window_request[comment]" placeholder="Enter ..."></textarea>
-	  </div>
+
           <div class = "row">
+           <div class="col-md-12">
+                  <label> </label> 
                 <input class="btn btn-large btn-primary" name="commit" type="submit" value="Send Request" />
+            </div>
           </div>
      </form>
     </div>
   </div>
 </div>
-<div class="col-md-6">
-<% if @window_request.status == 'Waiting' %>
+<% if @window_request.nil? %>
+  <div id="request_result" class="col-md-6">
+  <div id="statusbox" class="box box-warning box-solid">
+  </div>
+<% else %>
+  <div id="request_result_<%= @window_request.username %>" class="col-md-6">
+  <% if @window_request.status == 'Waiting' %>
                 <div id="statusbox" class="box box-warning box-solid">
-<% elsif @window_request.status == 'Opened' %>
+  <% elsif @window_request.status == 'Opened' %>
                 <div id="statusbox" class="box box-success box-solid">
-<% elsif @window_request.status == 'Unavailable' %>
-                <div id="statusbox%" class="box box-danger box-solid">
+  <% elsif @window_request.status == 'Unavailable' %>
+                <div id="statusbox" class="box box-danger box-solid">
+  <% end %>
 <% end %>
 				<% if @window_request.nil? %>
 				<% else %>
-            				<div class="box-header with-border">
+            				<div class="box-header box-warning with-border">
               				<h3 class="box-title"><%= @window_request.status %></h3>
 
               					<div class="box-tools pull-right">
@@ -75,35 +165,81 @@
             				</div>
             				<!-- /.box-header -->
             <div class="box-body">
-              <table class="table">
+              <table class="table table-fit">
                 <tr>
-                        <th>Check-In ID</th>
-                        <th><%= @window_request.username %></th>
+                        <td>Check-In ID</td>
+                        <td><%= @window_request.username %></td>
                 </tr>
                 <tr>
-                        <th>Branch</th>
-                        <th><%= @window_request.version %></th>
+                        <td>Branch</td>
+                        <td><%= @window_request.version %></td>
                 </tr>
                 <tr>
-                        <th>Comment & Requirement</th>
-                        <th><%= @window_request.comment %></th>
+                        <td>Bugzilla ID</td>
+                        <td><%= @window_request.bugid %></td>
                 </tr>
                 <tr>
-		<% if @window_request.status == 'Opened' %>
-			<th>Window Range</th>
-		<% else %>	
-                        <th>Perefer Window Range</th>
+                        <td>Files</td>
+                        <td style ="word-break:break-all;" ><%= @window_request.filetext.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Reason & Impact to Results</td>
+                        <td style ="word-break:break-all;" ><%= @window_request.comment.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Tests Done</td>
+                        <td style ="word-break:break-all;" ><%= @window_request.textdone.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+		<% if @window_request.version == 'rd' %>
+                <tr>
+                        <td>Group QA Coverage</td>
+                        <td><%= @window_request.Group_qa_coverage %></td>
+                </tr>
+		<% else %>
+                <tr>
+                        <td>AE Contact</td>
+                        <td><%= @window_request.ae_contact%></td>
+                </tr>
+                <tr>
+                        <td>Product Category</td>
+                        <td><%= @window_request.product_category %></td>
+                </tr>
+                <tr>
+                        <td>Justification for Back-porting</td>
+                        <td style ="word-break:break-all;" ><%= @window_request.justification_back_porting.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Change Summary</td>
+                        <td style ="word-break:break-all;" ><%= @window_request.change_summary.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Impact to DB</td>
+                        <td style ="word-break:break-all;" ><%= @window_request.impact_to_db.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>History</td>
+                        <td style ="word-break:break-all;" ><%= @window_request.history.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+
 		<% end %>
-                        <th><%= @window_request.time_range %></th>
+                <tr>
+
+		<% if @window_request.status == 'Opened' %>
+			<td>Window Range</td>
+		<% else %>	
+                        <td>Perefer Window Range</td>
+		<% end %>
+                        <td>
+                          <table>
+                                <tr><td><ul>
+                                <% @window_request.time_range.split(',').each do |s| %>
+                                        <li><%= s %></li>
+                                <% end %>
+                                </ul></td></tr>
+                         </table>
+                        </td>
                 </tr>
               </table>
-                <div class="input-group">
-                  <div class="input-group-addon">
-                    <i class="fa fa-clock-o"></i>
-                  </div>
-                  <input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime-confirm" disabled>
-                </div>
-                <!-- /.input group -->
           	</div>
             </div>
             <!-- /.box-body -->
@@ -114,12 +250,12 @@
 
   <div class-"row">
     <div class="col-md-12">
-	<div class="box box-widget">
-            <div class="box-header with-border">
+	<div class="box box-widget box-solid">
+            <div class="box box-header with-border">
+		              				<h3 class="box-title">Latest Record</h3>
+
             </div>
             <!-- /.box-header -->
-            <div class="box-body">
-            </div>
             <div id="messages-table" class="box-footer box-comments">
 		<% if @messages.any? %>
 			<% @messages.each do |message| %>
@@ -139,4 +275,5 @@
            </div><!--col-md-12-->
     </div><!--row-->
 </div>
+
 

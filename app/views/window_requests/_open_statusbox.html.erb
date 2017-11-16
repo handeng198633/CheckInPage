@@ -1,0 +1,94 @@
+     <% if @window_request_open_js.nil? %>
+     <% else %>
+          <div id="statusbox-<%= @window_request_open_js.id %>" class="box box-success box-solid">
+                                        <div class="box-header with-border">
+                                        <h3 class="box-title"><%= @window_request_open_js.status %></h3>
+
+                                                <div class="box-tools pull-right">
+                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                                </button>
+                                                </div>
+                                                <!-- /.box-tools -->
+                                        </div>
+                                        <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table">
+                <tr>
+                        <td>Check-In ID</td>
+                        <td><%= @window_request_open_js.username %></td>
+                </tr>
+                <tr>
+                        <td>Branch</td>
+                        <td><%= @window_request_open_js.version %></td>
+                </tr>
+                <tr>
+                        <td>Bugzilla ID</td>
+                        <td><%= @window_request_open_js.bugid %></td>
+                </tr>
+                <tr>
+                        <td>Files</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_open_js.filetext.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Reason & Impact to Results</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_open_js.comment.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Tests Done</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_open_js.textdone.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <% if @window_request_open_js.version == 'rd' %>
+                <tr>
+                        <td>Group QA Coverage</td>
+                        <td><%= @window_request_open_js.Group_qa_coverage %></td>
+                </tr>
+                <% else %>
+                <tr>
+                        <td>AE Contact</td>
+                        <td><%= @window_request_open_js.ae_contact%></td>
+                </tr>
+                <tr>
+                        <td>Product Category</td>
+                        <td><%= @window_request_open_js.product_category %></td>
+                </tr>
+                <tr>
+                        <td>Justification for Back-porting</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_open_js.justification_back_porting.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Change Summary</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_open_js.change_summary.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Impact to DB</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_open_js.impact_to_db.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>History</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_open_js.history.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+
+                <% end %>
+                <tr>
+                <% if @window_request_open_js.status == 'Opened' %>
+                        <td>Window Range</td>
+                <% else %>
+                        <td>Perefer Window Range</td>
+                <% end %>
+                        <td>
+                          <table>
+                                <tr><td><ul>
+                                <% @window_request_open_js.time_range.split(',').each do |s| %>
+                                        <li><%= s %></li>
+                                <% end %>
+                                </ul></td></tr>
+                         </table>
+                        </td>
+                </tr>
+              </table>
+            </div>
+            <!-- /.box-body -->
+        </div>
+</div>
+     <% end %>
+

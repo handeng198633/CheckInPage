@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170825025451) do
+ActiveRecord::Schema.define(version: 20171107012251) do
 
   create_table "messages", force: :cascade do |t|
     t.string "content"
@@ -59,6 +59,16 @@ ActiveRecord::Schema.define(version: 20170825025451) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "time_range"
+    t.string "bugid", default: "NULL"
+    t.text "filetext", default: "NULL"
+    t.string "textdone", default: "NULL"
+    t.string "Group_qa_coverage", default: "NULL"
+    t.text "justification_back_porting", default: "NULL"
+    t.text "change_summary", default: "NULL"
+    t.text "impact_to_db", default: "NULL"
+    t.text "history", default: "NULL"
+    t.string "ae_contact", default: "NULL"
+    t.string "product_category", default: "NULL"
   end
 
 end

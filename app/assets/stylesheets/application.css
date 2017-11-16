@@ -11,12 +11,14 @@
  * It is generally better to create a new file per style scope.
  *
 *= require bootstrap.min
+*= require AdminLTE.min
 *= require font-awesome.min
 *= require ionicons.min
-*= require AdminLTE.min
+*= require style
 *= require _all-skins.min
 *= require bootstrap-timepicker.min
 *= require daterangepicker
+*= require noty
 *= require_self
 *= require_tree .
 */

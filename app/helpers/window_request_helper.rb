@@ -15,6 +15,7 @@ module WindowRequestHelper
    def time_change(string)
         if string.split(' ')[2] == 'PM'
                 i = string.split(' ')[1].split(':')[0].to_i + 12
+		i = 0 if i == 24
         else
                 i = string.split(' ')[1].split(':')[0].to_i
         end

@@ -12,11 +12,10 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require rails-ujs
 //= require bootstrap.min
 //= require bootstrap-datepicker.min
 //= require bootstrap-timepicker.min
 //= require moment.min
 //= require daterangepicker
-//= require cable
+//= require noty
 //= require_tree .

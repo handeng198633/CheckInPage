@@ -1,4 +1,4 @@
-<div id="openbox-<%= window_request.id %>" class="col-md-4">
+<div id="openbox-<%= window_request.id %>" class="col-md-12">
 <% if window_request.status == 'Waiting' %>
                 <div id="statusbox-<%= window_request.id %>" class="box box-warning box-solid">
 <% elsif window_request.status == 'Opened' %>
@@ -19,46 +19,129 @@
             <div class="box-body">
               <table class="table">
                 <tr>
-                        <th>Check-In ID</th>
-                        <th><%= window_request.username %></th>
+                        <td>Check-In ID</td>
+                        <td><%= window_request.username %></td>
                 </tr>
                 <tr>
-                        <th>Branch</th>
-                        <th><%= window_request.version %></th>
+                        <td>Branch</td>
+                        <td><%= window_request.version %></td>
                 </tr>
                 <tr>
-                        <th>Comment & Requirement</th>
-                        <th><%= window_request.comment %></th>
+                        <td>Bugzilla ID</td>
+                        <td><%= window_request.bugid %></td>
                 </tr>
+                <tr>
+                        <td>Files</td>
+                        <td style ="word-break:break-all;" ><%= window_request.filetext.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Reason & Impact to Results</td>
+                        <td style ="word-break:break-all;" ><%= window_request.comment.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Tests Done</td>
+                        <td style ="word-break:break-all;" ><%= window_request.textdone.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <% if window_request.version == 'rd' %>
+                <tr>
+                        <td>Group QA Coverage</td>
+                        <td><%= window_request.Group_qa_coverage %></td>
+                </tr>
+                <% else %>
+                <tr>
+                        <td>AE Contact</td>
+                        <td><%= window_request.ae_contact%></td>
+                </tr>
+                <tr>
+                        <td>Product Category</td>
+                        <td><%= window_request.product_category %></td>
+                </tr>
+                <tr>
+                        <td>Justification for Back-porting</td>
+                        <td style ="word-break:break-all;" ><%= window_request.justification_back_porting.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Change Summary</td>
+                        <td style ="word-break:break-all;" ><%= window_request.change_summary.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Impact to DB</td>
+                        <td style ="word-break:break-all;" ><%= window_request.impact_to_db.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>History</td>
+                        <td style ="word-break:break-all;" ><%= window_request.history.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+
+                <% end %>
                 <tr>
 		<% if window_request.status == 'Opened' %>
-			<th>Window Range</th>
+			<td>Window Range</td>
 		<% else %>
-                        <th>Perefer Window Range</th>
+                        <td>Perefer Window Range</td>
 		<% end %>
-                        <th><%= window_request.time_range %></th>
+			<td>
+                          <table>
+				<tr><td><ul>
+				<% window_request.time_range.split(',').each do |s| %>
+					<li><%= s %></li>
+                        	<% end %>
+                                </ul></td></tr>
+			 </table>
+		        </td>
                 </tr>
+		<% if window_request.status == 'Unavailable' %>
+                <tr>
+                        <td>Hold Reason</td>
+                        <td>...</td>
+                </tr>
+		<% end %>
               </table>
+        <div class="text-center"> 
+            <button id="append-timerange-<%= window_request.id %>" class="btn btn-sm btn-primary"> + </button>
+            <button id="remove-timerange-<%= window_request.id %>" class="btn btn-sm btn-primary"> — </button>
+        </div>
 <form accept-charset="UTF-8" action="/open" method="post" class="form-group" data-remote="true" >
                 <div id="form-timerange-<%= window_request.id %>">
-			<div class="input-group">
+			         <div class="input-group">
                   		<div class="input-group-addon">
                     		<i class="fa fa-clock-o"></i>
                  		 </div>
-                  		<input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime-confirm-<%= window_request.id %>-1">
+                  		<input type="text" name="window_request[time_range_1]" class="form-control pull-right" id="reservationtime-confirm-<%= window_request.id %>-1" 
+<% if window_request.status == 'Opened' %>
+disabled
+<% end %>
+>
                 	</div>
-		</div>
-                <div class="input-group">
-			<button id="append-timerange-<%= window_request.id %>" class="btn btn-large btn-primary"> + </button>
+		        </div>
+<% if window_request.status == 'Waiting' %>
+                <div class="row">
+			<div class="col-md-1">
+			<label> </label>
 			<% if window_request.status == 'Waiting' %>
 				<input class="btn btn-large btn-primary" name="id-<%= window_request.id %>" value="OPEN" type="submit">
 			<% else %>
 				<input class="btn btn-large btn-primary disabled" name="commit" value="OPEN" type="submit">
 			<% end %>
-                </div>
+			</div>
+		</div>
 </form>
+<form accept-charset="UTF-8" action="/hold" method="post" class="form-group" data-remote="true" >
+		<div class="row">
+			<div class="col-md-1">
+			<% if window_request.status == 'Waiting' %>
+                                <input class="btn btn-large btn-primary" name="id-<%= window_request.id %>" value="HOLD" type="submit">
+                        <% else %>
+                                <input class="btn btn-large btn-primary disabled" name="commit" value="HOLD" type="submit">
+                        <% end %>
+			</div>
+		</div>
+</form>
+<% else %>
+<% end %>
                 <!-- /.input group -->
             </div>
             <!-- /.box-body -->
         </div>
 </div>
+

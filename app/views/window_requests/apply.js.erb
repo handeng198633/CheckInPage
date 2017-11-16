@@ -1,9 +1,24 @@
-$("#statusbox").html("<%= escape_javascript(render('window_requests/statusbox')) %>");
+<% if current_user.window_requests.count == 1 %>
+	$("#request_result").html("<%= escape_javascript(render('window_requests/statusbox')) %>");
+<% else %>
+	$("#request_result_<%= @window_request_js.username %>").html("<%= escape_javascript(render('window_requests/statusbox')) %>");
+<% end %>
 $('#reservationtime-confirm').daterangepicker({
         timePicker: true,
-        timePickerIncrement: 10,
+        timePickerIncrement: 1,
         timePicker24Hour: true,
         locale: {
             format: 'MM/DD/YYYY hh:mm:ss'
         }
         });
+$('#checkin-box').val('');
+$('#bugid-box').val('');
+$('#files-box').val('');
+$('#comment-box').val('');
+$('#tests-box').val('');
+$('#ae_contact_box').val('');
+$('#product_category_box').val('');
+$('#back-porting-box').val('');
+$('#change-summary-box').val('');
+$('#impact-to-db-box').val('');
+$('#history-box').val('');
