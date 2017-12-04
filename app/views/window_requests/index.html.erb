@@ -34,7 +34,16 @@
 <div class="col-md-6">
   <div class="box box-primary box-solid">
     <div class="box-header with-border">
-    <h3 class="box-title">Window Request</h3>
+    <h3 class="box-title text-align: center">Window Request</h3>
+		<div class="col-md-12">
+			 <input name="utf8" type="hidden" value="✓">
+			<select name="select[checkin_record]" id="select_checkin"  class="form-control" onchange="selectCheckIn()">
+				<option selected="selected" value="">Your Check-IN Record(set info from your last 5 Check-Ins)</option>
+				<% 5.times do |n| %>
+					<option value="<%= @record_requests[n].id %>"><%= @record_requests[n].username + ' | ' + @record_requests[n].version + ' | ' + @record_requests[n].bugid + ' | ' + @record_requests[n].created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %></option>
+				<% end %>
+			</select>		
+		</div>
     </div>
     <div class="box-body">
     <form accept-charset="UTF-8" action="/apply" method="post" class="form-group" data-remote="true" >

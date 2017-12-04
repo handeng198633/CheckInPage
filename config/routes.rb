@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   post '/apply' => 'window_requests#apply'
   post '/open' => 'window_requests#open'
   post '/hold' => 'window_requests#hold'
+  post '/select' => 'window_requests#select'
   resources :window_requests
   resources :messages
   devise_for :users

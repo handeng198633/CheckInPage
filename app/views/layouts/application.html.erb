@@ -55,6 +55,15 @@ $(document).ready(function(){
     <%= yield %>
    </div>
     <script type="text/javascript">
+    function selectCheckIn() {
+      var x = document.getElementById("select_checkin").value;
+        $.ajax({
+          dataType: "script",
+          type: "POST",
+          url: "select",
+          data: { checkin_request_id : x }
+        });
+    }
 	$(function() {
     $('#reservationtime').daterangepicker({
         timePicker: true,

@@ -4,6 +4,7 @@ class WindowRequestsController < ApplicationController
         @window_request = current_user.window_requests.last
         @messages = Message.order(:created_at).reverse_order.limit(6)
         @window_requests = WindowRequest.paginate(page: params[:page],:per_page => 1 ).order('id DESC')
+	@record_requests = current_user.window_requests.last(5)
   end
 
   def new
@@ -11,6 +12,15 @@ class WindowRequestsController < ApplicationController
   end
 
   def create
+  end
+
+  def select
+	@request_record = WindowRequest.new
+	@request_record = WindowRequest.find(params[:checkin_request_id])
+	respond_to do |format|
+		format.html {}
+		format.js  {}
+	end
   end
 
   def apply

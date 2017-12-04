@@ -97,10 +97,13 @@
                 </tr>
 		<% end %>
               </table>
+	<% if window_request.status == 'Opened' %>
+	<% else %>
         <div class="text-center"> 
             <button id="append-timerange-<%= window_request.id %>" class="btn btn-sm btn-primary"> + </button>
             <button id="remove-timerange-<%= window_request.id %>" class="btn btn-sm btn-primary"> — </button>
         </div>
+	<% end %>
 <form accept-charset="UTF-8" action="/open" method="post" class="form-group" data-remote="true" >
                 <div id="form-timerange-<%= window_request.id %>">
 			         <div class="input-group">
