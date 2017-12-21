@@ -30,7 +30,11 @@
                         <td style ="word-break:break-all;" ><%= @window_request_open_js.filetext.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
                 <tr>
-                        <td>Reason & Impact to Results</td>
+                        <td>Change Summary</td>
+                        <td style ="word-break:break-all;" ><%= @window_request_open_js.reason.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Impact to Results</td>
                         <td style ="word-break:break-all;" ><%= @window_request_open_js.comment.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
                 <tr>

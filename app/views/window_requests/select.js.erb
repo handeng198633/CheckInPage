@@ -1,13 +1,33 @@
 $('#checkin-box').val('');
 document.getElementById("checkin-box").value = "<%= @request_record.username %>";
+document.getElementById("version_select").value = "<%= @request_record.version %>";
+var select_version = document.getElementById("version_select").value;
+    if ( select_version == 'rd' ){
+        $("#form-1").show();
+        $("#form-2").hide();
+        $('#ae_contact_box').val('');
+        $('#product_category_box').val('');
+        $('#back-porting-box').val('');
+        $('#change-summary-box').val('');
+        $('#impact-to-db-box').val('');
+        $('#history-box').val(''); 
+    } else {
+        $("#form-1").hide();
+        $("#form-2").show();
+        $('#group_qa_select').val('');
+        } 
 $('#bugid-box').val('');
 document.getElementById("bugid-box").value = "<%= @request_record.bugid %>";
 $('#files-box').val('');
 document.getElementById("files-box").value = "<%= @request_record.filetext %>";
+$('#reason-box').val('');
+document.getElementById("reason-box").value = "<%= @request_record.reason %>";
 $('#comment-box').val('');
 document.getElementById("comment-box").value = "<%= @request_record.comment %>";
 $('#tests-box').val('');
 document.getElementById("tests-box").value = "<%= @request_record.textdone %>";
+$('#group_qa_select').val('');
+document.getElementById("group_qa_select").value = "<%= @request_record.Group_qa_coverage %>";
 $('#ae_contact_box').val('');
 document.getElementById("ae_contact_box").value = "<%= @request_record.ae_contact %>";
 $('#product_category_box').val('');

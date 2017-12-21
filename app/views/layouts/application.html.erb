@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>RedHawk Check-In Page</title>
+    <title>Check-in window request for RedHawk</title>
     <%= favicon_link_tag 'ansys_icon.ico' %>
     <%= csrf_meta_tags %>
     <!--<%= action_cable_meta_tag %>-->    
@@ -31,6 +31,20 @@ $(document).ready(function(){
 
 
 });
+/*  $(document).ready(function() {
+    $('input:radio[name="window_request_way"]').change(function() {
+        $("#comment_content").val('');
+        $("#reservationtime").val('');
+        if ($(this).val() == 'yes') {
+            $("#comment_input").hide();
+            $("#time_input").show();
+        }
+        else {
+            $("#time_input").hide();
+            $("#comment_input").show();
+        }
+    });
+}); */
   </script>
   </head>
 
@@ -55,6 +69,7 @@ $(document).ready(function(){
     <%= yield %>
    </div>
     <script type="text/javascript">
+    
     function selectCheckIn() {
       var x = document.getElementById("select_checkin").value;
         $.ajax({
@@ -67,12 +82,21 @@ $(document).ready(function(){
 	$(function() {
     $('#reservationtime').daterangepicker({
         timePicker: true,
-        timePickerIncrement: 1,
+        timePickerIncrement: 10,
         timePicker24Hour: true,
+        autoUpdateInput: false,
+        singleDatePicker: true,
         locale: {
             format: 'MM/DD/YYYY h:mm A'
         }
     	});
+    $('#reservationtime').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY h:mm A') + ' - ' + picker.endDate.format('MM/DD/YYYY h:mm A'));
+    });
+
+    $('#reservationtime').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+    });
     $("input[id*='reservationtime-confirm']").daterangepicker({
         timePicker: true,
         timePickerIncrement: 1,
@@ -84,15 +108,21 @@ $(document).ready(function(){
         });
 $(document).ready(function(){
 	$("#form-2").hide();
+        $("#comment_input").hide();
+        $("#reason_box_not_rd").hide();
 });
 function val(){
         var select_version = document.getElementById("version_select").value;
         if ( select_version == 'rd' ){
                $("#form-1").show();
                $("#form-2").hide();
+               $("#reason_box_not_rd").hide();
+               $("#reason_box").show();
         } else {
                 $("#form-1").hide();
                 $("#form-2").show();
+               $("#reason_box_not_rd").show();
+               $("#reason_box").hide();
         }
 }
     </script>

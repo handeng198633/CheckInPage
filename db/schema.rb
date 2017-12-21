@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171107012251) do
+ActiveRecord::Schema.define(version: 20171215063710) do
 
   create_table "messages", force: :cascade do |t|
     t.string "content"
@@ -40,6 +40,9 @@ ActiveRecord::Schema.define(version: 20171107012251) do
     t.datetime "locked_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "login_id"
+    t.string "realname"
+    t.string "product_line", default: "RH"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -69,6 +72,9 @@ ActiveRecord::Schema.define(version: 20171107012251) do
     t.text "history", default: "NULL"
     t.string "ae_contact", default: "NULL"
     t.string "product_category", default: "NULL"
+    t.string "mail_cc_list"
+    t.string "send_copy_ornot", default: "no"
+    t.string "reason", default: "NULL"
   end
 
 end
