@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171215063710) do
+ActiveRecord::Schema.define(version: 20171226065408) do
 
   create_table "messages", force: :cascade do |t|
     t.string "content"
@@ -75,6 +75,8 @@ ActiveRecord::Schema.define(version: 20171215063710) do
     t.string "mail_cc_list"
     t.string "send_copy_ornot", default: "no"
     t.string "reason", default: "NULL"
+    t.text "reason_not_rd"
+    t.text "rd_impact_to_db"
   end
 
 end

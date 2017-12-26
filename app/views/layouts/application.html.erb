@@ -31,20 +31,17 @@ $(document).ready(function(){
 
 
 });
-/*  $(document).ready(function() {
-    $('input:radio[name="window_request_way"]').change(function() {
-        $("#comment_content").val('');
-        $("#reservationtime").val('');
+  $(document).ready(function() {
+    $('input:radio[name="impact_to_db_way"]').change(function() {
+        $("#impact-to-db-box").val('');
         if ($(this).val() == 'yes') {
-            $("#comment_input").hide();
-            $("#time_input").show();
+            $("#impact_yes").show();
         }
         else {
-            $("#time_input").hide();
-            $("#comment_input").show();
+            $("#impact_yes").hide();
         }
     });
-}); */
+}); 
   </script>
   </head>
 
@@ -55,7 +52,7 @@ $(document).ready(function(){
    <% if alert %>
      <p class="alert alert-danger"><%= alert %></p>
    <% end %>
-   <header class="navbar navbar-toggleable-md navbar-light bg-faded">
+   <!--<header class="navbar navbar-toggleable-md navbar-light bg-faded">
     <% if user_signed_in? %>
        Logged in as <strong><%= current_user.email %></strong>.
        <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
@@ -64,10 +61,20 @@ $(document).ready(function(){
        <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
        <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
     <% end %>
-   </header>
+   </header>-->
    <div class="container">
     <%= yield %>
    </div>
+    <footer class="footer">
+    <% if user_signed_in? %>
+       Logged in as <strong><%= current_user.email %></strong>.
+       <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+       <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+    <% else %>
+       <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+       <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+    <% end %>
+    </footer>
     <script type="text/javascript">
     
     function selectCheckIn() {
@@ -108,8 +115,9 @@ $(document).ready(function(){
         });
 $(document).ready(function(){
 	$("#form-2").hide();
-        $("#comment_input").hide();
         $("#reason_box_not_rd").hide();
+        $("#impact_yes").hide();
+        $("#released_impact_to_db").hide();
 });
 function val(){
         var select_version = document.getElementById("version_select").value;
@@ -118,11 +126,15 @@ function val(){
                $("#form-2").hide();
                $("#reason_box_not_rd").hide();
                $("#reason_box").show();
+               $("#released_impact_to_db").hide();
+               $("#rd_impact_to_db").show();
         } else {
                 $("#form-1").hide();
                 $("#form-2").show();
                $("#reason_box_not_rd").show();
                $("#reason_box").hide();
+               $("#released_impact_to_db").show();
+               $("#rd_impact_to_db").hide();
         }
 }
     </script>

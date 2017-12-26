@@ -83,37 +83,6 @@
 		<input type="text" id="bugid-box" class="form-control" name="window_request[bugid]" placeholder="e.g: 54321">
         </div>
         </div>
-		<!--<label class="col-sm-2 control-label">Bugzilla ID*:</label>
-                <div class="col-sm-2">
-			<input type="text" id="bugid-box" class="form-control" name="window_request[bugid]" placeholder="only numbers, e.g. 12345">
-		</div>-->
-	<div class="col-md-12 form-horizontal">
-                <div class="form-group">
-                  <label class="col-md-3 control-label">Preferred Time:<i class="fa fa-fw fa-question-circle" data-toggle="tooltip" title="When you would prefer to check-in? Just need select start time of window."></i></label>
-                  <div class="col-md-9">
-                  <div id="time_input" class="input-group">
-                    <div class="input-group-addon">
-                    <i class="fa fa-clock-o"></i>
-                    </div>
-                       <input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime">
-                     </div>
-                  </div>
-                </div>
-                <!--<label>Preferred Time:
-                    <input type="radio" name="window_request_way" value="yes" checked> time mode
-                    <input type="radio" name="window_request_way" value="no"> comment mode
-		</label>
-                <div id="time_input" class="input-group">
-                  <div class="input-group-addon">
-                    <i class="fa fa-clock-o"></i>
-                  </div>
-                  <input type="text" name="window_request[time_range]" class="form-control pull-right" id="reservationtime">
-                </div>-->
-            <!--    <div id="comment_input">
-                  <textarea id="comment_content" class="form-control" rows="1" name="window_request[time_range]" placeholder="When you would prefer to check-in?"></textarea>
-                </div> -->
-                <!-- /.input group -->
-         </div>
       <div class="col-md-12">
                   <label>Files:</label>
                   <textarea id="files-box" class="form-control" rows="3" name="window_request[filetext]" placeholder="Enter list of files that will be checked in..."></textarea>
@@ -124,12 +93,26 @@
       </div>
      <div id="reason_box_not_rd" class="col-md-12">
                   <label>Change Summary:</label>
-                  <textarea id="reason-box" class="form-control" rows="3" name="window_request[reason]" placeholder="Enter change summary for release note"></textarea>
+                  <textarea id="reason-box" class="form-control" rows="3" name="window_request[reason_not_rd]" placeholder="Enter change summary for release note"></textarea>
       </div>
       <div class="col-md-12">
                   <label>Impact to Results:</label>
                   <textarea id="comment-box" class="form-control" rows="3" name="window_request[comment]" placeholder="Brief description of any impact in result for users or QA tests"></textarea>
       </div>
+      <div id="rd_impact_to_db" class="col-md-12">
+                  <label>Impact to DB:
+                        <input type="radio" name="impact_to_db_way" value="no" checked> No
+                       <input type="radio" name="impact_to_db_way" value="yes"> Yes
+                </label>
+                <div id="impact_no"></div>
+                <div id="impact_yes">
+                  <textarea id="rd-impact-to-db-box" class="form-control" rows="3" name="window_request[rd_impact_to_db]" placeholder="Brief description of any impact in result for users or QA tests..."></textarea>
+                </div>
+      </div>
+     <div id="released_impact_to_db" class="col-md-12">
+		<label>Impact to DB:</label>
+                <textarea id="impact-to-db-box" class="form-control" rows="3" name="window_request[impact_to_db]" placeholder="Brief description of any impact in result for users or QA tests..."></textarea>
+     </div>
        <!-- <div class="col-md-12 form-horizontal">
                 <div class="form-group">
                   <label class="col-md-6 control-label">Tests Done:</label>
@@ -178,7 +161,7 @@
 
       </div>-->
 	
-      <div id="form-2" >
+      <div id="form-2">
 		<div class="col-md-6">
                   <label>AE Contact:</label>
                   <textarea id="ae_contact_box" class="form-control" rows="1" name="window_request[ae_contact]" placeholder="Enter..."></textarea>
@@ -197,33 +180,11 @@
                   <textarea id="back-porting-box" class="form-control" rows="3" name="window_request[justification_back_porting]" placeholder="Only bug fixes should be back-ported to production streams...."></textarea>
 		</div>
                 <div class="col-md-12">
-                  <label>Change Summary:</label>
-                  <textarea id="change-summary-box" class="form-control" rows="3" name="window_request[change_summary]" placeholder="Enter change summary for release note..."></textarea>
-                </div>
-                <div class="col-md-12">
-                  <label>Impact to DB:</label>
-                  <textarea id="impact-to-db-box" class="form-control" rows="3" name="window_request[impact_to_db]" placeholder="Brief description of any impact in result for users or QA tests..."></textarea>
-                </div>
-                <div class="col-md-12">
                   <label>History:</label>
                   <textarea id="history-box" class="form-control" rows="3" name="window_request[history]" placeholder="Enter the history of rd trunk check-in (when)..."></textarea>
                 </div>
-	  </div>
+     </div>
 
-          <!-- <div class="col-md-12">
-                <label>Send a Copy</label>
-                <div class="col-md-12">
-                List of comma separated email addresses to notify in addition to redhawk_qa@ansys.com. It is recommended to send a copy to the project leader.
-		</div>
-		<div class="col-md-7">
-			<textarea id="mail_cc_list" class="form-control" rows="1" name="window_request[mail_cc_list]" placeholder="Mail address want to notify"></textarea>
-		</div>
-		<div class="col-md-5 checkbox">
-		   <label>
-                    <input type="checkbox" name="window_request[send_copy_ornot]" value="yes"> Send me a copy
-                  </label>
-		</div>
-	</div>-->
 
       <div class="col-md-12 form-horizontal">
                 <div class="form-group">
@@ -239,9 +200,18 @@
                 </div>
        </div>
 
+        <div class="col-md-12 form-horizontal">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">Preferred Time:</label>
+                  <div class="col-md-8">
+			<textarea id="time_input" class="form-control" rows="1" name="window_request[time_range]" placeholder="When you would prefer to check-in?"></textarea>
+		  </div> 
+               </div>
+        </div>
+
            <div class="col-md-12">
                   <label> </label> 
-                <input class="btn btn-large btn-primary" name="commit" type="submit" value="Send Request" />
+                <input class="btn btn-large btn-primary" name="commit" type="submit" data-confirm="Needed info(Unix Login ID & Bugzilla ID)fill in?" value="Send Request" />
             </div>
      </form>
     </div>
@@ -321,10 +291,10 @@
                         <td>Justification for Back-porting</td>
                         <td style ="word-break:break-all;" ><%= @window_request.justification_back_porting.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
-                <tr>
+                <!--<tr>
                         <td>Change Summary</td>
                         <td style ="word-break:break-all;" ><%= @window_request.change_summary.gsub(/\n/, '<br/>').html_safe %></td>
-                </tr>
+                </tr>-->
                 <tr>
                         <td>Impact to DB</td>
                         <td style ="word-break:break-all;" ><%= @window_request.impact_to_db.gsub(/\n/, '<br/>').html_safe %></td>
