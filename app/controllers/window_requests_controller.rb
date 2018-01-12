@@ -6,6 +6,7 @@ class WindowRequestsController < ApplicationController
         @window_requests = WindowRequest.paginate(page: params[:page],:per_page => 1 ).order('id DESC')
 	@record_requests = current_user.window_requests.last(5)
         @user = current_user
+        @user_requests = WindowRequest.where("created_at >= ?", Time.zone.now.beginning_of_day).reverse_order.all
   end
 
   def new
@@ -13,6 +14,10 @@ class WindowRequestsController < ApplicationController
   end
 
   def create
+  end
+
+  def self_requests
+ 	@user_requests = current_user.window_requests.reverse_order.all
   end
 
   def select
@@ -24,12 +29,22 @@ class WindowRequestsController < ApplicationController
 	end
   end
 
+  def choose
+        @user = current_user
+        @request_detail = WindowRequest.new
+        @request_detail = WindowRequest.find(params[:checkin_request_id])
+        respond_to do |format|
+                format.html {}
+                format.js  {}
+        end
+  end
+
   def apply
         window_request = WindowRequest.new
         window_request = current_user.window_requests.build(window_request_params)
         window_request.status = "Waiting"
         window_request.reason = window_request.reason + window_request.reason_not_rd
-        window_request.impact_to_db = window_request.rd_impact_to_db + window_request.impact_to_db
+        window_request.product_line = current_user.product_line
 
         if window_request.save!
 		message = Message.new
@@ -41,7 +56,7 @@ class WindowRequestsController < ApplicationController
 			rd_or_not = 'n'
 		end
 		if message.save!
-			ActionCable.server.broadcast 'room_channel', content:  message.content, username: User.where("id = ?", message.user_id).first.email, created_at: message.created_at.strftime("%Y-%m-%d %H:%M:%S %Z"), requestid: window_request.id, time_range: window_request.time_range, checkinid: window_request.username, version: window_request.version, reason: window_request.reason, comment: window_request.comment, bugid: window_request.bugid, filetext: window_request.filetext, testdone: window_request.textdone, group_qa_coverage: window_request.Group_qa_coverage, rd_or_not: rd_or_not, ae_contact: window_request.ae_contact, product_category: window_request.product_category, justification_back_porting: window_request.justification_back_porting, impact_to_db: window_request.impact_to_db, history: window_request.history 
+			ActionCable.server.broadcast 'room_channel', content:  message.content, username: User.where("id = ?", message.user_id).first.email, created_at: message.created_at.strftime("%Y-%m-%d %H:%M:%S %Z"), requestid: window_request.id, time_range: window_request.time_range, checkinid: window_request.username, version: window_request.version, reason: window_request.reason, comment: window_request.comment, bugid: window_request.bugid, filetext: window_request.filetext, testdone: window_request.textdone, group_qa_coverage: window_request.Group_qa_coverage, rd_or_not: rd_or_not, ae_contact: window_request.ae_contact, product_category: window_request.product_category, justification_back_porting: window_request.justification_back_porting, impact_to_db: window_request.impact_to_db, history: window_request.history, product_line: window_request.product_line
 		end
 		@record_requests_updated = current_user.window_requests.last(5)
                 @window_request_js = current_user.window_requests.last
@@ -109,6 +124,6 @@ class WindowRequestsController < ApplicationController
     
   private
   	def window_request_params
-		 params.require(:window_request).permit(:username, :version, :time_range, :reason, :reason_not_rd, :comment, :bugid, :filetext, :textdone, :Group_qa_coverage, :justification_back_porting, :impact_to_db, :rd_impact_to_db, :history, :ae_contact, :product_category, :mail_cc_list, :send_copy_ornot)
+		 params.require(:window_request).permit(:username, :version, :time_range, :reason, :reason_not_rd, :comment, :bugid, :filetext, :textdone, :Group_qa_coverage, :justification_back_porting, :impact_to_db, :history, :ae_contact, :product_category, :mail_cc_list, :send_copy_ornot)
 	end
 end

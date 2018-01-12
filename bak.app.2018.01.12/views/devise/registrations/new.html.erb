@@ -1,0 +1,53 @@
+<% provide(:title, 'Login Page') %>
+
+<div class="login-box">
+<!--  <div class="login-logo">
+    <a href="/"><b>Check-In</b>Page</a>
+  </div>-->
+  <!-- /.login-logo -->
+  <div class="login-box-body">
+    <p class="login-box-msg"></p>
+
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+  <%= devise_error_messages! %>
+
+  <div class="field form-group has_feedback">
+    <%= f.email_field :email, autofocus: true, class: "form-control", placeholder: "Please input your ANSYS email" %>
+  </div>
+
+  <div class="field form-group has_feedback">
+    <%= f.text_field :login_id, autofocus: true, class: "form-control", placeholder: "Please input your Unix Login ID" %>
+  </div>
+
+  <div class="field form-group has_feedback">
+    <%= f.text_field :realname, autofocus: true, class: "form-control", placeholder: "Please input your real name" %>
+  </div>
+
+  <div class="field form-group has_feedback">
+                  <select name="user[product_line]" class ="form-control">
+                                     <option value="">You belong to ...?</option>
+                                     <option value="RH">RedHawk</option>
+                                     <option value="PA">PowerArtist</option>
+                                     <option value="TT">Totem</option>
+                              </select>
+  </div>
+
+  <div class="field form-group has_feedback">
+    <%= f.password_field :password, autocomplete: "off", class: "form-control", placeholder: "Please set your password(≥6 characters)" %>
+  </div>
+
+  <div class="field form-group has_feedback">
+    <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control", placeholder: "Input your password again for confirm"%>
+  </div>
+    <div class="row">
+    <div class="col-xs-8">
+    </div>
+  <div class="col-xs-4">
+    <%= f.submit "Sign Up", class:"btn btn-primary btn-block btn-flat" %>
+  </div>
+  </div>
+<% end %>
+
+<%= render "devise/shared/links" %>
+</div>
+</div>

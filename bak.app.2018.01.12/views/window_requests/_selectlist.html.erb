@@ -1,0 +1,7 @@
+                         <input name="utf8" type="hidden" value="✓">
+                        <select name="select[checkin_record]" id="select_checkin"  class="form-control" onchange="selectCheckIn()">
+                                <option selected="selected" value="">Your Check-IN Record(set info from your last 5 Check-Ins)</option>
+                                <% @record_requests_updated.count.times do |n| %>
+                                        <option value="<%= @record_requests_updated[n].id %>"><%= @record_requests_updated[n].username + ' | ' + @record_requests_updated[n].version + ' | ' + @record_requests_updated[n].bugid + ' | ' + @record_requests_updated[n].created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %></option>
+                                <% end %>
+                        </select>

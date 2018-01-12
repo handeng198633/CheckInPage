@@ -1,0 +1,5 @@
+<% if @user.window_requests.count == 0 %>
+   $("#request_result").html("<%= escape_javascript(render('window_requests/detailbox')) %>");
+<% else %>
+   $("#request_result_<%= @user.login_id %>").html("<%= escape_javascript(render('window_requests/detailbox')) %>");
+<% end %>

@@ -86,6 +86,16 @@ $(document).ready(function(){
           data: { checkin_request_id : x }
         });
     }
+
+    $('button').click(function() {
+      var id = $(this).val();
+        $.ajax({
+          dataType: "script",
+          type: "POST",
+          url: "choose",
+          data: { checkin_request_id : id }
+        });
+    });
 	$(function() {
     $('#reservationtime').daterangepicker({
         timePicker: true,
@@ -115,15 +125,25 @@ $(document).ready(function(){
         });
 $(document).ready(function(){
 	$("#form-2").hide();
+        $("#form-3").hide();
         $("#reason_box_not_rd").hide();
         $("#impact_yes").hide();
         $("#released_impact_to_db").hide();
 });
+
+function submitForm() {
+    var check_in_id = document.getElementById("checkin-box").value;
+    var input_bug_id = document.getElementById("bugid-box").value;
+    if ( check_in_id == "" || input_bug_id == "" ){
+        return confirm('Needed info(Unix Login ID & Bugzilla ID) not fill in!');
+    }
+}
 function val(){
         var select_version = document.getElementById("version_select").value;
         if ( select_version == 'rd' ){
                $("#form-1").show();
                $("#form-2").hide();
+               $("#form-3").hide();
                $("#reason_box_not_rd").hide();
                $("#reason_box").show();
                $("#released_impact_to_db").hide();
@@ -131,6 +151,7 @@ function val(){
         } else {
                 $("#form-1").hide();
                 $("#form-2").show();
+                $("#form-3").show();
                $("#reason_box_not_rd").show();
                $("#reason_box").hide();
                $("#released_impact_to_db").show();

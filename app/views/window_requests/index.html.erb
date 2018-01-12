@@ -38,7 +38,7 @@
 		<div id="select-records" class="col-md-12">
 			 <input name="utf8" type="hidden" value="✓">
 			<select name="select[checkin_record]" id="select_checkin"  class="form-control" onchange="selectCheckIn()">
-				<option selected="selected" value="">Your Check-IN Record(set info from your last 5 Check-Ins)</option>
+				<option selected="selected" value="">Your Check-In Record(set info from your last 5 Check-Ins)</option>
 				<% @record_requests.count.times do |n| %>
 					<option value="<%= @record_requests[n].id %>"><%= @record_requests[n].username + ' | ' + @record_requests[n].version + ' | ' + @record_requests[n].bugid + ' | ' + @record_requests[n].created_at.strftime("%Y-%m-%d %H:%M:%S %Z") %></option>
 				<% end %>
@@ -55,7 +55,7 @@
                   <input type="text" id="checkin-box" class="form-control" name="window_request[username]" value="<%= @user.login_id %>" readonly>
                 <% end %>
                 </div>-->
-        <div class="col-md-5">
+        <div class="col-md-4">
         	<div class="input-group">
                 	<div class="input-group-btn">
                   	<button type="button" class="btn btn-danger">Unix Login ID</button>
@@ -71,11 +71,16 @@
         <div class="col-md-2">
 				<select onchange="val()" name="window_request[version]" class ="form-control" id= "version_select">
 			             <option value="rd">rd</option>
-				     <option value="RH<%= `cat /projs00/qa/misc/UQA_RELEASE5`.sub!("\n", "").sub(".", "v") %>"><%= `cat /projs00/qa/misc/UQA_RELEASE5`.sub!("\n", "")%></option>
-				     <option value="RH<%= `cat /projs00/qa/misc/UQA_RELEASE6`.sub!("\n", "").sub(".", "v") %>"><%= `cat /projs00/qa/misc/UQA_RELEASE6`.sub!("\n", "")%></option>
+				     <% if current_user.product_line == 'PA' %>
+				         <option value="v20<%= `cat /projs00/qa/misc/UQA_RELEASE5`.sub!("\n", "").sub(".", "_") %>_b"><%= `cat /projs00/qa/misc/UQA_RELEASE5`.sub!("\n", "")%></option>
+					 <option value="v20<%= `cat /projs00/qa/misc/UQA_RELEASE6`.sub!("\n", "").sub(".", "_") %>_b"><%= `cat /projs00/qa/misc/UQA_RELEASE6`.sub!("\n", "")%></option>
+                                     <% else %>
+				         <option value="RH<%= `cat /projs00/qa/misc/UQA_RELEASE5`.sub!("\n", "").sub(".", "v") %>"><%= `cat /projs00/qa/misc/UQA_RELEASE5`.sub!("\n", "")%></option>
+				         <option value="RH<%= `cat /projs00/qa/misc/UQA_RELEASE6`.sub!("\n", "").sub(".", "v") %>"><%= `cat /projs00/qa/misc/UQA_RELEASE6`.sub!("\n", "")%></option>
+				     <% end %>
 		              </select>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
         <div class="input-group">
                 <div class="input-group-btn">
                   <button type="button" class="btn btn-danger">Bugzilla ID</button>
@@ -83,9 +88,18 @@
 		<input type="text" id="bugid-box" class="form-control" name="window_request[bugid]" placeholder="e.g: 54321">
         </div>
         </div>
+        <div class="col-md-2">
+            <input class="btn btn-large btn-primary btn-block" name="commit" type="submit" onclick="submitForm()" value=" Send " />
+        </div>
       <div class="col-md-12">
                   <label>Files:</label>
                   <textarea id="files-box" class="form-control" rows="3" name="window_request[filetext]" placeholder="Enter list of files that will be checked in..."></textarea>
+      </div>
+      <div id="form-3">
+                <div class="col-md-12">
+                  <label>Justification for Back-porting:</label>
+                  <textarea id="back-porting-box" class="form-control" rows="3" name="window_request[justification_back_porting]" placeholder="Only bug fixes should be back-ported to production streams...."></textarea>
+                </div>
       </div>
       <div id="reason_box" class="col-md-12"> 
                   <label>Change Summary:</label>
@@ -100,38 +114,17 @@
                   <textarea id="comment-box" class="form-control" rows="3" name="window_request[comment]" placeholder="Brief description of any impact in result for users or QA tests"></textarea>
       </div>
       <div id="rd_impact_to_db" class="col-md-12">
+      </div>
+     <div id="released_impact_to_db" class="col-md-12">
                   <label>Impact to DB:
                         <input type="radio" name="impact_to_db_way" value="no" checked> No
                        <input type="radio" name="impact_to_db_way" value="yes"> Yes
                 </label>
                 <div id="impact_no"></div>
                 <div id="impact_yes">
-                  <textarea id="rd-impact-to-db-box" class="form-control" rows="3" name="window_request[rd_impact_to_db]" placeholder="Brief description of any impact in result for users or QA tests..."></textarea>
+                  <textarea id="impact-to-db-box" class="form-control" rows="3" name="window_request[impact_to_db]" placeholder="Brief description of any impact in result for users or QA tests..."></textarea>
                 </div>
-      </div>
-     <div id="released_impact_to_db" class="col-md-12">
-		<label>Impact to DB:</label>
-                <textarea id="impact-to-db-box" class="form-control" rows="3" name="window_request[impact_to_db]" placeholder="Brief description of any impact in result for users or QA tests..."></textarea>
      </div>
-       <!-- <div class="col-md-12 form-horizontal">
-                <div class="form-group">
-                  <label class="col-md-6 control-label">Tests Done:</label>
-
-                  <div class="col-md-6">
-      			<div id="form-1" class="col-md-12 form-horizontal">
-                			<div class="form-group">
-                  					<label class="col-md-8 control-label"> &nbsp;&nbsp;&nbsp;Group QA Coverage:</label>
-                  				<div class="col-md-4">
-                             				<select id="group_qa_select" name="window_request[Group_qa_coverage]" class ="form-control">
-                                     				<option value="NO">NO</option>
-                                     				<option value="YES">YES</option>
-                              				</select>
-                  				</div>
-                			</div>
-       			</div>
-                   </div>
-                </div>
-        </div>-->
       <div class="col-md-12">
                   <label>Tests Done:</label>
                   <textarea id="tests-box" class="form-control" rows="3" name="window_request[textdone]" placeholder="It is mandatory to run unitQA before checkins. Pointers to the tests that has been done, such as unitQA, groupQA, specialQA, or case name_list,..., etc."></textarea>
@@ -162,29 +155,33 @@
       </div>-->
 	
       <div id="form-2">
-		<div class="col-md-6">
+                <div class="col-md-12">
+                  <label>Check-In History:</label>
+                  <textarea id="history-box" class="form-control" rows="3" name="window_request[history]" placeholder="Enter the history of rd trunk check-in (when)..."
+></textarea>
+                </div>
+		<div class="col-md-7">
                   <label>AE Contact:</label>
-                  <textarea id="ae_contact_box" class="form-control" rows="1" name="window_request[ae_contact]" placeholder="Enter..."></textarea>
+                  <input id="ae_contact_box" class="form-control"  name="window_request[ae_contact]" placeholder="Enter...">
       		</div>
-      		<div class="col-md-6">
+      		<div class="col-md-5">
                   <label>Product Category:</label>
                   <select id="product_category_box" name="window_request[product_category]" class ="form-control">
-                                     <option value=""></option>
-                                     <option value="For RedHawk only">for RedHawk only</option>
-                                     <option value="For Totem only">For Totem only</option>
+                                     <option selected="selected" value="RedHawk only">RedHawk only</option>
+                                     <option value="Totem only">Totem only</option>
                                      <option value="Both RedHawk and Totem">Both RedHawk and Totem</option>
                               </select>
 		</div>
-                <div class="col-md-12">
-                  <label>Justification for Back-porting:</label>
-                  <textarea id="back-porting-box" class="form-control" rows="3" name="window_request[justification_back_porting]" placeholder="Only bug fixes should be back-ported to production streams...."></textarea>
-		</div>
-                <div class="col-md-12">
-                  <label>History:</label>
-                  <textarea id="history-box" class="form-control" rows="3" name="window_request[history]" placeholder="Enter the history of rd trunk check-in (when)..."></textarea>
-                </div>
      </div>
 
+        <div class="col-md-12 form-horizontal">
+                <div class="form-group">
+                  <label class="col-md-4 control-label">Preferred Time:</label>
+                  <div class="col-md-8">
+                        <textarea id="time_input" class="form-control" rows="1" name="window_request[time_range]" placeholder="When you would prefer to check-in?"></textarea>
+                  </div>
+               </div>
+        </div>
 
       <div class="col-md-12 form-horizontal">
                 <div class="form-group">
@@ -200,29 +197,62 @@
                 </div>
        </div>
 
-        <div class="col-md-12 form-horizontal">
-                <div class="form-group">
-                  <label class="col-md-4 control-label">Preferred Time:</label>
-                  <div class="col-md-8">
-			<textarea id="time_input" class="form-control" rows="1" name="window_request[time_range]" placeholder="When you would prefer to check-in?"></textarea>
-		  </div> 
-               </div>
-        </div>
 
-           <div class="col-md-12">
+           <div class="col-md-2">
                   <label> </label> 
-                <input class="btn btn-large btn-primary" name="commit" type="submit" data-confirm="Needed info(Unix Login ID & Bugzilla ID)fill in?" value="Send Request" />
+                <input class="btn btn-large btn-primary btn-block" name="commit" type="submit" onclick="submitForm()" value=" Send " />
             </div>
+	   <div class="col-md-10"></div>
      </form>
     </div>
   </div>
 </div>
+
+<div class="col-md-6">
+<div class="col-md-12">
+<div class="box box-primary box-solid">
+            <div class="box-header">
+              <h3 class="box-title">Window Requests | <%= Date.today %></h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body table-responsive no-padding">
+              <table class="table table-hover">
+                <tbody><tr>
+                  <th>Check-In ID</th>
+                  <th>Branch</th>
+                  <th>Bugzilla ID</th>
+                  <th>Status</th>
+                  <th>Operation</th>
+                </tr>
+                <% @user_requests.each do |user_request| %>
+                <tr>
+                  <td><%= user_request.username %></td>
+                  <td><%= user_request.version %></td>
+                  <td><%= user_request.bugid %></td>
+                  <% if user_request.status == 'Opened' %>
+                        <td><span class="label label-success"><%= user_request.status %></span></td>
+                  <% elsif user_request.status == 'Waiting' %>
+                        <td><span class="label label-warning"><%= user_request.status %></span></td>
+                  <% elsif user_request.status == 'Unavailable' %>
+                        <td><span class="label label-danger"><%= user_request.status %></span></td>
+                  <% end %>
+                  <td>
+			<button class="btn btn-primary btn-sm" type="button" value=<%= user_request.id %>>Detail</button>
+                 </td>
+                </tr>
+                <% end %>
+              </tbody></table>
+            </div>
+            <!-- /.box-body -->
+</div>
+</div>
+
 <% if @window_request.nil? %>
-  <div id="request_result" class="col-md-6">
+  <div id="request_result" class="col-md-12">
   <div id="statusbox" class="box box-warning box-solid">
   </div>
 <% else %>
-  <div id="request_result_<%= @window_request.username %>" class="col-md-6">
+  <div id="request_result_<%= @window_request.username %>" class="col-md-12">
   <% if @window_request.status == 'Waiting' %>
                 <div id="statusbox" class="box box-warning box-solid">
   <% elsif @window_request.status == 'Opened' %>
@@ -262,10 +292,6 @@
                         <td style ="word-break:break-all;" ><%= @window_request.filetext.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
                 <tr>
-                        <td>Change Summary</td>
-                        <td style ="word-break:break-all;" ><%= @window_request.reason.gsub(/\n/, '<br/>').html_safe %></td>
-                </tr>
-                <tr>
                         <td>Impact to Results</td>
                         <td style ="word-break:break-all;" ><%= @window_request.comment.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
@@ -280,6 +306,10 @@
                 </tr>
 		<% else %>
                 <tr>
+                        <td>Change Summary</td>
+                        <td style ="word-break:break-all;" ><%= @window_request.reason.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
                         <td>AE Contact</td>
                         <td><%= @window_request.ae_contact%></td>
                 </tr>
@@ -291,16 +321,12 @@
                         <td>Justification for Back-porting</td>
                         <td style ="word-break:break-all;" ><%= @window_request.justification_back_porting.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
-                <!--<tr>
-                        <td>Change Summary</td>
-                        <td style ="word-break:break-all;" ><%= @window_request.change_summary.gsub(/\n/, '<br/>').html_safe %></td>
-                </tr>-->
                 <tr>
                         <td>Impact to DB</td>
                         <td style ="word-break:break-all;" ><%= @window_request.impact_to_db.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
                 <tr>
-                        <td>History</td>
+                        <td>Check-In History</td>
                         <td style ="word-break:break-all;" ><%= @window_request.history.gsub(/\n/, '<br/>').html_safe %></td>
                 </tr>
 
@@ -329,14 +355,22 @@
 	    <% end %>
     </div>
   </div>
+</div>
 <% end %><!--user.admin?-->
 
   <div class-"row">
     <div class="col-md-12">
 	<div class="box box-widget box-solid">
             <div class="box box-header with-border">
+		<div class = "row">
+			<div class="col-md-2">
 		              				<h3 class="box-title">Latest Record</h3>
-
+			</div>
+			<!--<div class="col-md-2">
+				<button type="button" class="btn btn-primary btn-large btn-block"><a href="/requests">My Requests Record</a></button>	
+                	</div>
+			<div class="col-md-8"></div>-->
+		</div>
             </div>
             <!-- /.box-header -->
             <div id="messages-table" class="box-footer box-comments">

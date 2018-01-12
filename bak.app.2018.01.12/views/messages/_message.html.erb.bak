@@ -1,0 +1,6 @@
+<div class="message">
+<p>
+<b><%= l Time.now, format: :short %>:</b>
+<%= message.content %>
+</p>
+</div>

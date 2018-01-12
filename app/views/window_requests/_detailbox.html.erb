@@ -1,0 +1,99 @@
+<% if @request_detail.status == 'Waiting' %>
+                <div id="statusbox-<%= @request_detail.id %>" class="box box-warning box-solid">
+<% elsif @request_detail.status == 'Opened' %>
+                <div id="statusbox-<%= @request_detail.id %>" class="box box-success box-solid">
+<% elsif @request_detail.status == 'Unavailable' %>
+                <div id="statusbox-<%= @request_detail.id %>" class="box box-danger box-solid">
+<% end %>
+                                        <div class="box-header with-border">
+                                        <h3 class="box-title"><%= @request_detail.status %></h3>
+
+                                                <div class="box-tools pull-right">
+                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                                                </button>
+                                                </div>
+                                                <!-- /.box-tools -->
+                                        </div>
+                                        <!-- /.box-header -->
+            <div class="box-body">
+              <table class="table">
+                <tr>
+                        <td>Product Line</td>
+                        <td><%= @request_detail.product_line %></td>
+                </tr>
+                <tr>
+                        <td>Check-In ID</td>
+                        <td><%= @request_detail.username %></td>
+                </tr>
+                <tr>
+                        <td>Branch</td>
+                        <td><%= @request_detail.version %></td>
+                </tr>
+                <tr>
+                        <td>Bugzilla ID</td>
+                        <td><%= @request_detail.bugid %></td>
+                </tr>
+                <tr>
+                        <td>Files</td>
+                        <td style ="word-break:break-all;" ><%= @request_detail.filetext.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Change Summary</td>
+                        <td style ="word-break:break-all;" ><%= @request_detail.reason.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Impact to Results</td>
+                        <td style ="word-break:break-all;" ><%= @request_detail.comment.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Tests Done</td>
+                        <td style ="word-break:break-all;" ><%= @request_detail.textdone.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <% if @request_detail.version == 'rd' %>
+                <tr>
+                        <td>Group QA Coverage</td>
+                        <td><%= @request_detail.Group_qa_coverage %></td>
+                </tr>
+                <% else %>
+                <tr>
+                        <td>AE Contact</td>
+                        <td><%= @request_detail.ae_contact%></td>
+                </tr>
+                <tr>
+                        <td>Product Category</td>
+                        <td><%= @request_detail.product_category %></td>
+                </tr>
+                <tr>
+                        <td>Justification for Back-porting</td>
+                        <td style ="word-break:break-all;" ><%= @request_detail.justification_back_porting.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Impact to DB</td>
+                        <td style ="word-break:break-all;" ><%= @request_detail.impact_to_db.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+                <tr>
+                        <td>Check-In History</td>
+                        <td style ="word-break:break-all;" ><%= @request_detail.history.gsub(/\n/, '<br/>').html_safe %></td>
+                </tr>
+
+                <% end %>
+                <tr>
+		<% if @request_detail.status == 'Opened' %>
+			<td>Window Range</td>
+		<% else %>
+                        <td>Perefer Window Range</td>
+		<% end %>
+			<td>
+                          <table>
+				<tr><td><ul>
+				<% @request_detail.time_range.split(',').each do |s| %>
+					<li><%= s %></li>
+                        	<% end %>
+                                </ul></td></tr>
+			 </table>
+		        </td>
+                </tr>
+              </table>
+		</div>
+    </div>
+

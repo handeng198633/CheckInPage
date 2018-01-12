@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171226065408) do
+ActiveRecord::Schema.define(version: 20180105014949) do
 
   create_table "messages", force: :cascade do |t|
     t.string "content"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 20171226065408) do
     t.string "reason", default: "NULL"
     t.text "reason_not_rd"
     t.text "rd_impact_to_db"
+    t.string "product_line"
   end
 
 end

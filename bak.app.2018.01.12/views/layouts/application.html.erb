@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Check-in window request for RedHawk</title>
+    <%= favicon_link_tag 'ansys_icon.ico' %>
+    <%= csrf_meta_tags %>
+    <!--<%= action_cable_meta_tag %>-->    
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+  <script>
+
+$(document).ready(function(){
+    var click_number = 2;
+    $("button[id*='append-timerange']").click(function(){
+      var number = this.id.split("-")[2];
+      $("#form-timerange-" + number ).append('<div class="input-group"><div class="input-group-addon"><i class="fa fa-clock-o"></i></div><input id="reservationtime-confirm-append" type="text" name="window_request[time_range_' + click_number + ']" class="form-control pull-right"></div>');
+      click_number ++;
+      $("input[id='reservationtime-confirm-append']").daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 1,
+        timePicker24Hour: true,
+        locale: {
+            format: 'MM/DD/YYYY h:mm A'
+        }
+        });
+        });
+    $("button[id*='remove-timerange']").click(function(){
+     var select = document.getElementById('form-timerange-' + this.id.split("-")[2]);
+     select.removeChild(select.lastChild); 
+     });
+
+
+});
+  $(document).ready(function() {
+    $('input:radio[name="impact_to_db_way"]').change(function() {
+        $("#impact-to-db-box").val('');
+        if ($(this).val() == 'yes') {
+            $("#impact_yes").show();
+        }
+        else {
+            $("#impact_yes").hide();
+        }
+    });
+}); 
+  </script>
+  </head>
+
+  <body>
+   <% if notice %>
+     <p class="alert alert-success"><%= notice %></p>
+   <% end %>
+   <% if alert %>
+     <p class="alert alert-danger"><%= alert %></p>
+   <% end %>
+   <!--<header class="navbar navbar-toggleable-md navbar-light bg-faded">
+    <% if user_signed_in? %>
+       Logged in as <strong><%= current_user.email %></strong>.
+       <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+       <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+    <% else %>
+       <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+       <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+    <% end %>
+   </header>-->
+   <div class="container">
+    <%= yield %>
+   </div>
+    <footer class="footer">
+    <% if user_signed_in? %>
+       Logged in as <strong><%= current_user.email %></strong>.
+       <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+       <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+    <% else %>
+       <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+       <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+    <% end %>
+    </footer>
+    <script type="text/javascript">
+    
+    function selectCheckIn() {
+      var x = document.getElementById("select_checkin").value;
+        $.ajax({
+          dataType: "script",
+          type: "POST",
+          url: "select",
+          data: { checkin_request_id : x }
+        });
+    }
+	$(function() {
+    $('#reservationtime').daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 10,
+        timePicker24Hour: true,
+        autoUpdateInput: false,
+        singleDatePicker: true,
+        locale: {
+            format: 'MM/DD/YYYY h:mm A'
+        }
+    	});
+    $('#reservationtime').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('MM/DD/YYYY h:mm A') + ' - ' + picker.endDate.format('MM/DD/YYYY h:mm A'));
+    });
+
+    $('#reservationtime').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('');
+    });
+    $("input[id*='reservationtime-confirm']").daterangepicker({
+        timePicker: true,
+        timePickerIncrement: 1,
+        timePicker24Hour: true,
+        locale: {
+            format: 'MM/DD/YYYY h:mm A'
+        }
+        });
+        });
+$(document).ready(function(){
+	$("#form-2").hide();
+        $("#form-3").hide();
+        $("#reason_box_not_rd").hide();
+        $("#impact_yes").hide();
+        $("#released_impact_to_db").hide();
+});
+
+function submitForm() {
+    var check_in_id = document.getElementById("checkin-box").value;
+    var input_bug_id = document.getElementById("bugid-box").value;
+    if ( check_in_id == "" || input_bug_id == "" ){
+        return confirm('Needed info(Unix Login ID & Bugzilla ID) not fill in!');
+    }
+}
+function val(){
+        var select_version = document.getElementById("version_select").value;
+        if ( select_version == 'rd' ){
+               $("#form-1").show();
+               $("#form-2").hide();
+               $("#form-3").hide();
+               $("#reason_box_not_rd").hide();
+               $("#reason_box").show();
+               $("#released_impact_to_db").hide();
+               $("#rd_impact_to_db").show();
+        } else {
+                $("#form-1").hide();
+                $("#form-2").show();
+                $("#form-3").show();
+               $("#reason_box_not_rd").show();
+               $("#reason_box").hide();
+               $("#released_impact_to_db").show();
+               $("#rd_impact_to_db").hide();
+        }
+}
+    </script>
+  </body>
+</html>
